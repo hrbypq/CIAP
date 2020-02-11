@@ -28,12 +28,36 @@ public class School {
     /**
      * 该学院开设的课程 一对多
      */
-    @OneToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER,mappedBy = "school")
+    @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "school")
     private Set<Curriculum> curriculumSet;
 
     /**
      * 该学院就职的教师 一对多
      */
-    @OneToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER,mappedBy = "school")
+    @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "school")
     private Set<Teacher> teacherSet;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<Curriculum> getCurriculumSet() {
+        return curriculumSet;
+    }
+
+    public Set<Teacher> getTeacherSet() {
+        return teacherSet;
+    }
 }

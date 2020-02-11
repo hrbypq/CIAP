@@ -22,7 +22,7 @@ public class Student {
     private String id;
 
     /**
-     * 密码  非空 最大16字节
+     * 密码 非空 最大16字节
      */
     @Column(nullable = false,length = 16)
     private String password;
@@ -33,4 +33,27 @@ public class Student {
     @Column(nullable = false,length = 32)
     private String name;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

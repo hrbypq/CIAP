@@ -53,6 +53,68 @@ public class Teacher {
     /**
      * 该教师开设的课程 一对多
      */
-    @OneToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER,mappedBy = "teacher")
+    @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "teacher")
     private Set<Curriculum> curriculumSet;
+
+    /**
+     * 该教师上传的文件 一对多
+     */
+    @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "teacher")
+    private Set<File> fileSet;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
+
+    public Set<Curriculum> getCurriculumSet() {
+        return curriculumSet;
+    }
+
+    public Set<File> getFileSet() {
+        return fileSet;
+    }
 }

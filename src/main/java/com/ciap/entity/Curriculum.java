@@ -1,6 +1,7 @@
 package com.ciap.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * 课程
@@ -37,4 +38,56 @@ public class Curriculum {
     @ManyToOne
     @JoinColumn(name = "teacher_id",nullable = false)
     private Teacher teacher;
+
+    /**
+     * 本课程下的评论 一对多
+     */
+    @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "curriculum")
+    private Set<Comment> commentSet;
+
+    /**
+     * 本课程的文件 一对多
+     */
+    @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "curriculum")
+    private Set<File> fileSet;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
+    public Set<Comment> getCommentSet() {
+        return commentSet;
+    }
+
+    public Set<File> getFileSet() {
+        return fileSet;
+    }
 }
