@@ -17,8 +17,7 @@ public class Comment {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(length = 32)
-    private String id;
+    private int id;
 
     /**
      * 所属课程编号 外键指向课程表主键 字段名称curriculum_id 非空
@@ -57,11 +56,11 @@ public class Comment {
     @Column(nullable = false)
     private Boolean top;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

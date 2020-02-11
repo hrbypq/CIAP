@@ -17,7 +17,7 @@ public class File {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private int id;
 
     /**
      * 文件上传时间 非空
@@ -45,11 +45,11 @@ public class File {
     @JoinColumn(name = "teacher_id",nullable = false)
     private Teacher teacher;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
