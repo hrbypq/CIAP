@@ -10,4 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 
 public interface CurriculumRepository extends JpaRepository<Curriculum,String> {
+    Curriculum findByName(String a_name);
 }
