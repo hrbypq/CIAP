@@ -108,7 +108,9 @@ public class Comment {
         return top;
     }
 
-    public void setTop(Boolean top) {
+    public void setTop(boolean top) {
         this.top = top;
     }
+
+
 }

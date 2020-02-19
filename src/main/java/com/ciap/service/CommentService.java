@@ -1,25 +1,38 @@
 package com.ciap.service;
 
+import com.ciap.dao.CommentRepository;
+import com.ciap.dao.CurriculumRepository;
 import com.ciap.entity.Comment;
+import com.ciap.entity.Curriculum;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
-
-/**
- * 评论服务类
- * @version 1.0
- * @author
- */
 
 @Service
 public class CommentService {
+    @Autowired
+    /**
+     * Comment Dao接口
+     */
+    private CommentRepository commentRepository;
+    @Autowired
+    /**
+     *Curriculum dao接口
+     */
+    private CurriculumRepository curriculumRepository;
     /**
      *
      * @param a_comment
      * @return
      */
     public boolean createComment(Comment a_comment){
-        return true;
+        Comment comment=commentRepository.save(a_comment);
+        if(comment.equals(a_comment))
+            return true;
+        else
+            return false;
     }
 
     /**
@@ -27,8 +40,11 @@ public class CommentService {
      * @param a_curr_id 课程主键
      * @return
      */
-    public Set<Comment>printComment(String a_curr_id){
-        return null;
+    public Set<Comment> printComment(String a_curr_id){
+        Set<Comment>res=null;
+        Curriculum curriculum=curriculumRepository.getOne(a_curr_id);
+        res=commentRepository.findAllByCurriculum(curriculum);
+        return res;
     }
 
     /**
@@ -36,7 +52,12 @@ public class CommentService {
      * @param a_id
      * @return
      */
-    public boolean deleteComment(String a_id){
-        return true;
+    public boolean deleteComment(int a_id){
+        commentRepository.deleteById(a_id);
+
+        if(!commentRepository.existsById(a_id))
+            return true;
+        else
+            return false;
     }
 }
