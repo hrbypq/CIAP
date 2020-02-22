@@ -6,9 +6,7 @@ import com.ciap.entity.Comment;
 import com.ciap.entity.Curriculum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.util.Set;
+import java.util.List;
 
 @Service
 public class CommentService {
@@ -40,8 +38,8 @@ public class CommentService {
      * @param a_curr_id 课程主键
      * @return
      */
-    public Set<Comment> printComment(String a_curr_id){
-        Set<Comment>res=null;
+    public List<Comment> printComment(String a_curr_id){
+        List<Comment>res=null;
         Curriculum curriculum=curriculumRepository.getOne(a_curr_id);
         res=commentRepository.findAllByCurriculum(curriculum);
         return res;

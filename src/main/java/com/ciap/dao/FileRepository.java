@@ -1,6 +1,6 @@
 package com.ciap.dao;
 
-import com.ciap.entity.File;
+import com.ciap.entity.Material;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author ypq
  */
 
-public interface FileRepository extends JpaRepository<File,String> {
+public interface FileRepository extends JpaRepository<Material,String> {
 }

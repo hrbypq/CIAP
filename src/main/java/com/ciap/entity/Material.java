@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "t_file")
-public class File {
+public class Material {
     /**
      * 文件编号 主键 自动生成 最大32字节
      */

@@ -1,9 +1,10 @@
 package com.ciap.dao;
 
 import com.ciap.entity.Curriculum;
+import com.ciap.entity.School;
+import com.ciap.entity.Teacher;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.Set;
+import java.util.List;
 
 /**
  * 课程Dao接口
@@ -12,7 +13,7 @@ import java.util.Set;
  */
 
 public interface CurriculumRepository extends JpaRepository<Curriculum,String> {
-    Set<Curriculum> findByName(String a_name);
-    Set<Curriculum> findByTeacher(String a_teacher_name);
-    Set<Curriculum> findBySchool(String a_school_name);
+    List<Curriculum> findByName(String a_name);
+    List<Curriculum> findByTeacher(Teacher a_teacher);
+    List<Curriculum> findBySchool(School a_school);
 }

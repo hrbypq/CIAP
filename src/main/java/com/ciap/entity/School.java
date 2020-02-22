@@ -1,7 +1,7 @@
 package com.ciap.entity;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 /**
  * 学院
@@ -29,13 +29,13 @@ public class School {
      * 该学院开设的课程 一对多
      */
     @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "school")
-    private Set<Curriculum> curriculumSet;
+    private List<Curriculum> curriculumSet;
 
     /**
      * 该学院就职的教师 一对多
      */
     @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "school")
-    private Set<Teacher> teacherSet;
+    private List<Teacher> teacherSet;
 
     public String getId() {
         return id;
@@ -53,11 +53,11 @@ public class School {
         this.name = name;
     }
 
-    public Set<Curriculum> getCurriculumSet() {
+    public List<Curriculum> getCurriculumSet() {
         return curriculumSet;
     }
 
-    public Set<Teacher> getTeacherSet() {
+    public List<Teacher> getTeacherSet() {
         return teacherSet;
     }
 }

@@ -2,13 +2,16 @@ package com.ciap.service;
 
 import com.ciap.dao.CurrInfoRepository;
 import com.ciap.dao.CurriculumRepository;
+import com.ciap.dao.TeacherRepository;
 import com.ciap.entity.CurrInfo;
 import com.ciap.entity.Curriculum;
-import com.ciap.entity.File;
+import com.ciap.entity.Material;
+import com.ciap.entity.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * 课程服务类
@@ -31,33 +34,49 @@ public class CurriculumService {
     private CurrInfoRepository currInfoRepository;
 
     /**
+     * Teacher Dao接口
+     */
+    @Autowired
+    private TeacherRepository teacherRepository;
+
+    /**
      * 按课程名称搜索课程
      * @param a_name 课程名
-     * @return 所需课程对象Set 查询失败返回空Set
+     * @return 所需课程对象List 查询失败返回空List
      */
-    public Set<Curriculum> searchByName(String a_name){
-        Set<Curriculum>curriculumSet=curriculumRepository.findByName(a_name);
-        return curriculumSet;
+    public List<Curriculum> searchByName(String a_name){
+        List<Curriculum>curriculumList=curriculumRepository.findByName(a_name);
+        return curriculumList;
     }
 
     /**
      * 按教师姓名搜索课程
      * @param a_teacher_name 教师名
-     * @return 所需课程对象Set 查询失败返回空Set
+     * @return 所需课程对象List 查询失败返回空List
      */
-    public Set<Curriculum> searchByTeacher(String a_teacher_name){
-        Set<Curriculum>curriculumSet=curriculumRepository.findByTeacher(a_teacher_name);
-        return curriculumSet;
+    public List<Curriculum> searchByTeacher(String a_teacher_name){
+        //可能会有同名教师 用List存储
+        List<Teacher>teacherList=teacherRepository.findByName(a_teacher_name);
+        //最终得到的课程列表
+        List<Curriculum>curriculumList=new ArrayList<>();
+        //遍历同名教师列表
+        for(Teacher teacher:teacherList){
+            //该教师的课程列表
+            List<Curriculum>curriculumList1=curriculumRepository.findByTeacher(teacher);
+            for(Curriculum curriculum:curriculumList1)
+                curriculumList.add(curriculum);
+        }
+        return curriculumList;
     }
 
     /**
      * 按学院搜索课程
      * @param a_school_name 学院名
-     * @return 所需课程对象Set 查询失败返回空Set
+     * @return 所需课程对象List 查询失败返回空List
      */
-    public Set<Curriculum> searchBySchool(String a_school_name){
-        Set<Curriculum>curriculumSet=curriculumRepository.findBySchool(a_school_name);
-        return curriculumSet;
+    public List<Curriculum> searchBySchool(String a_school_name){
+        List<Curriculum>curriculumList=curriculumRepository.findBySchool(null);
+        return curriculumList;
     }
 
     /**
@@ -78,12 +97,11 @@ public class CurriculumService {
      */
     public boolean updateCurriculum(Curriculum a_curriculum){
         if(a_curriculum!=null)
-            curriculumRepository.deleteById(a_curriculum.getId());
+            this.deleteCurriculum(a_curriculum.getId());
         else
             return false;
-        if(curriculumRepository.save(a_curriculum)!=null)
-            return true;
-        return false;
+        curriculumRepository.save(a_curriculum);
+        return true;
     }
 
     /**
@@ -122,31 +140,31 @@ public class CurriculumService {
      */
     public boolean updateCurrInfo(CurrInfo a_currinfo){
         if(a_currinfo!=null)
-            currInfoRepository.deleteById(a_currinfo.getId());
+            this.deleteCurrInfo(a_currinfo.getId());
         else
             return false;
-        if(currInfoRepository.save(a_currinfo)!=null)
-            return true;
-        return false;
+        currInfoRepository.save(a_currinfo);
+        return true;
     }
 
     /**
      * 删除课程信息
-     * @param a_curr_id
+     * @param a_curr_id 课程编号
      */
     public void deleteCurrInfo(String a_curr_id){
         currInfoRepository.deleteById(a_curr_id);
     }
 
-    public File downloadFile(){
-        return null;
-    }
-
-    public boolean uploadFile(File a_file){
+    /**
+     *
+     * @param a_material
+     * @return
+     */
+    public boolean createMaterial(Material a_material){
         return false;
     }
 
-    public File searchFileByName(String a_file_name){
+    public Material searchMaterialByName(String a_file_name){
         return null;
     }
 }
