@@ -39,11 +39,23 @@ public class Material {
     private Curriculum curriculum;
 
     /**
+     * 文件所属的课程编号 外键属性
+     */
+    @Transient
+    private String curriculum_id;
+
+    /**
      * 上传本文件的教师 外键指向教师表主键 字段名称teacher_id 非空
      */
     @ManyToOne
     @JoinColumn(name = "teacher_id",nullable = false)
     private Teacher teacher;
+
+    /**
+     * 上传本文件的教师编号 外键属性
+     */
+    @Transient
+    private String teacher_id;
 
     public int getId() {
         return id;
@@ -83,5 +95,21 @@ public class Material {
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
+    }
+
+    public String getCurriculum_id() {
+        return curriculum_id;
+    }
+
+    public void setCurriculum_id(String curriculum_id) {
+        this.curriculum_id = curriculum_id;
+    }
+
+    public String getTeacher_id() {
+        return teacher_id;
+    }
+
+    public void setTeacher_id(String teacher_id) {
+        this.teacher_id = teacher_id;
     }
 }

@@ -33,11 +33,23 @@ public class Curriculum {
     private School school;
 
     /**
+     * 学院编号 外键属性
+     */
+    @Transient
+    private String school_id;
+
+    /**
      * 教师编号 外键指向teacher表主键 字段名teacher_id 非空
      */
     @ManyToOne
     @JoinColumn(name = "teacher_id",nullable = false)
     private Teacher teacher;
+
+    /**
+     * 教师编号 外键属性
+     */
+    @Transient
+    private String teacher_id;
 
     /**
      * 本课程下的评论 一对多
@@ -89,5 +101,21 @@ public class Curriculum {
 
     public List<Material> getMaterialSet() {
         return materialSet;
+    }
+
+    public String getSchool_id() {
+        return school_id;
+    }
+
+    public void setSchool_id(String school_id) {
+        this.school_id = school_id;
+    }
+
+    public String getTeacher_id() {
+        return teacher_id;
+    }
+
+    public void setTeacher_id(String teacher_id) {
+        this.teacher_id = teacher_id;
     }
 }

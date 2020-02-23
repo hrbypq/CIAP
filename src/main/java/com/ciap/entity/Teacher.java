@@ -51,6 +51,12 @@ public class Teacher {
     private School school;
 
     /**
+     * 学院编号 外键属性
+     */
+    @Transient
+    private String school_id;
+
+    /**
      * 该教师开设的课程 一对多
      */
     @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "teacher")
@@ -116,5 +122,13 @@ public class Teacher {
 
     public List<Material> getMaterialSet() {
         return materialSet;
+    }
+
+    public String getSchool_id() {
+        return school_id;
+    }
+
+    public void setSchool_id(String school_id) {
+        this.school_id = school_id;
     }
 }

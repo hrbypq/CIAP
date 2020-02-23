@@ -27,6 +27,12 @@ public class Comment {
     private Curriculum curriculum;
 
     /**
+     * 所属课程编号 外键属性
+     */
+    @Transient
+    private String curriculum_id;
+
+    /**
      * 评论发送者编号 非空 最大8字节
      */
     @Column(nullable = false,length = 8)
@@ -112,5 +118,11 @@ public class Comment {
         this.top = top;
     }
 
+    public String getCurriculum_id() {
+        return curriculum_id;
+    }
 
+    public void setCurriculum_id(String curriculum_id) {
+        this.curriculum_id = curriculum_id;
+    }
 }
