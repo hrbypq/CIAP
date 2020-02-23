@@ -1,7 +1,6 @@
 package com.ciap.entity;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * 课程
@@ -51,18 +50,6 @@ public class Curriculum {
     @Transient
     private String teacher_id;
 
-    /**
-     * 本课程下的评论 一对多
-     */
-    @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "curriculum")
-    private List<Comment> commentSet;
-
-    /**
-     * 本课程的文件 一对多
-     */
-    @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "curriculum")
-    private List<Material> materialSet;
-
     public String getId() {
         return id;
     }
@@ -93,14 +80,6 @@ public class Curriculum {
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
-    }
-
-    public List<Comment> getCommentSet() {
-        return commentSet;
-    }
-
-    public List<Material> getMaterialSet() {
-        return materialSet;
     }
 
     public String getSchool_id() {

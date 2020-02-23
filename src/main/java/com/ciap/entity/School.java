@@ -1,7 +1,6 @@
 package com.ciap.entity;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * 学院
@@ -22,20 +21,8 @@ public class School {
     /**
      * 学院名称 非空 不可重复 最大32字节
      */
-    @Column(nullable = false,length = 32)
+    @Column(nullable = false,unique = true,length = 32)
     private String name;
-
-    /**
-     * 该学院开设的课程 一对多
-     */
-    @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "school")
-    private List<Curriculum> curriculumSet;
-
-    /**
-     * 该学院就职的教师 一对多
-     */
-    @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "school")
-    private List<Teacher> teacherSet;
 
     public String getId() {
         return id;
@@ -51,13 +38,5 @@ public class School {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Curriculum> getCurriculumSet() {
-        return curriculumSet;
-    }
-
-    public List<Teacher> getTeacherSet() {
-        return teacherSet;
     }
 }

@@ -1,12 +1,7 @@
 package com.ciap.service;
 
-import com.ciap.dao.CurrInfoRepository;
-import com.ciap.dao.CurriculumRepository;
-import com.ciap.dao.TeacherRepository;
-import com.ciap.entity.CurrInfo;
-import com.ciap.entity.Curriculum;
-import com.ciap.entity.Material;
-import com.ciap.entity.Teacher;
+import com.ciap.dao.*;
+import com.ciap.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -40,21 +35,26 @@ public class CurriculumService {
     private TeacherRepository teacherRepository;
 
     /**
-     * 按课程名称搜索课程
+     * School Dao接口
+     */
+    @Autowired
+    private SchoolRepository schoolRepository;
+
+    /**
+     * 按课程名称搜索课程 可模糊查询
      * @param a_name 课程名
-     * @return 所需课程对象List 查询失败返回空List
+     * @return 对应的课程对象List 查询失败返回空List
      */
     public List<Curriculum> searchByName(String a_name){
-        List<Curriculum>curriculumList=curriculumRepository.findByName(a_name);
-        return curriculumList;
+        return curriculumRepository.findByNameLike("%"+a_name+"%");
     }
 
     /**
      * 按教师姓名搜索课程
      * @param a_teacher_name 教师名
-     * @return 所需课程对象List 查询失败返回空List
+     * @return 对应的课程对象List 查询失败返回空List
      */
-    public List<Curriculum> searchByTeacher(String a_teacher_name){
+    public List<Curriculum> searchByTeacherName(String a_teacher_name){
         //可能会有同名教师 用List存储
         List<Teacher>teacherList=teacherRepository.findByName(a_teacher_name);
         //最终得到的课程列表
@@ -70,46 +70,56 @@ public class CurriculumService {
     }
 
     /**
-     * 按学院搜索课程
-     * @param a_school_name 学院名
-     * @return 所需课程对象List 查询失败返回空List
+     * 按学院编号搜索课程
+     * @param a_school_id 学院编号
+     * @return 对应的课程对象List 查询失败返回空List
      */
-    public List<Curriculum> searchBySchool(String a_school_name){
-        List<Curriculum>curriculumList=curriculumRepository.findBySchool(null);
-        return curriculumList;
+    public List<Curriculum> searchBySchoolId(String a_school_id){
+        //按学院编号查询学院对象
+        Optional<School> school=schoolRepository.findById(a_school_id);
+        if(!school.isPresent())
+            return new ArrayList<>();
+        return curriculumRepository.findBySchool(school.get());
     }
 
     /**
      * 新增课程
      * @param a_curriculum 课程对象
-     * @return 是否添加成功
+     * @return 参数对象为空返回false
      */
     public boolean createCurriculum(Curriculum a_curriculum){
-        if(curriculumRepository.save(a_curriculum)!=null)
+        if(a_curriculum!=null){
+            curriculumRepository.save(a_curriculum);
             return true;
+        }
         return false;
     }
 
     /**
      * 更新课程
      * @param a_curriculum 更新后的的课程对象
-     * @return 是否更新成功
+     * @return 若参数对象为空或课程编号不存在则返回false
      */
     public boolean updateCurriculum(Curriculum a_curriculum){
-        if(a_curriculum!=null)
+        if(a_curriculum!=null&&curriculumRepository.existsById(a_curriculum.getId())){
             this.deleteCurriculum(a_curriculum.getId());
-        else
-            return false;
-        curriculumRepository.save(a_curriculum);
-        return true;
+            this.createCurriculum(a_curriculum);
+            return true;
+        }
+        return false;
     }
 
     /**
      * 删除课程
      * @param a_curr_id 课程id
+     * @return 若课程编号不存在则返回false
      */
-    public void deleteCurriculum(String a_curr_id){
-        curriculumRepository.deleteById(a_curr_id);
+    public boolean deleteCurriculum(String a_curr_id){
+        if(curriculumRepository.existsById(a_curr_id)){
+            curriculumRepository.deleteById(a_curr_id);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -117,54 +127,47 @@ public class CurriculumService {
      * @param a_curr_id 课程编号
      * @return 对应的课程信息对象 查询失败返回空Optional对象
      */
-    public Optional<CurrInfo> searchCurrInfo(String a_curr_id){
-        Optional<CurrInfo> currInfo=currInfoRepository.findById(a_curr_id);
-        return currInfo;
+    public Optional<CurrInfo> searchCurrInfoById(String a_curr_id){
+        return currInfoRepository.findById(a_curr_id);
     }
 
     /**
      * 新建课程信息
      * @param a_currinfo 课程信息对象
-     * @return 是否添加成功
+     * @return 参数对象为空返回false
      */
     public boolean createCurrInfo(CurrInfo a_currinfo){
-        if(currInfoRepository.save(a_currinfo)!=null)
+        if(a_currinfo!=null){
+            currInfoRepository.save(a_currinfo);
             return true;
+        }
         return false;
     }
 
     /**
      * 更新课程信息
      * @param a_currinfo 更新后的课程信息对象
-     * @return 是否更新成功
+     * @return 若参数对象为空或课程编号不存在则返回false
      */
     public boolean updateCurrInfo(CurrInfo a_currinfo){
-        if(a_currinfo!=null)
+        if(a_currinfo!=null&&currInfoRepository.existsById(a_currinfo.getId())){
             this.deleteCurrInfo(a_currinfo.getId());
-        else
-            return false;
-        currInfoRepository.save(a_currinfo);
-        return true;
+            this.createCurrInfo(a_currinfo);
+            return true;
+        }
+        return false;
     }
 
     /**
      * 删除课程信息
      * @param a_curr_id 课程编号
+     * @return 若课程编号不存在则返回false
      */
-    public void deleteCurrInfo(String a_curr_id){
-        currInfoRepository.deleteById(a_curr_id);
-    }
-
-    /**
-     *
-     * @param a_material
-     * @return
-     */
-    public boolean createMaterial(Material a_material){
+    public boolean deleteCurrInfo(String a_curr_id){
+        if(currInfoRepository.existsById(a_curr_id)){
+            currInfoRepository.deleteById(a_curr_id);
+            return true;
+        }
         return false;
-    }
-
-    public Material searchMaterialByName(String a_file_name){
-        return null;
     }
 }

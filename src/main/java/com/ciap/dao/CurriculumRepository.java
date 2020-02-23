@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 public interface CurriculumRepository extends JpaRepository<Curriculum,String> {
-    List<Curriculum> findByName(String a_name);
+    List<Curriculum> findByNameLike(String a_name);
     List<Curriculum> findByTeacher(Teacher a_teacher);
     List<Curriculum> findBySchool(School a_school);
 }

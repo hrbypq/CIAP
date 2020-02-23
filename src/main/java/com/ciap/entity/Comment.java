@@ -13,7 +13,7 @@ import java.util.Date;
 @Table(name = "t_comment")
 public class Comment {
     /**
-     * 评论编号 主键 自动生成 最大32字节
+     * 评论编号 主键 自动生成
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,10 +39,10 @@ public class Comment {
     private String poster_id;
 
     /**
-     * 要回复的评论的编号 非回复则置空 最大32字节
+     * 要回复的评论的编号 非回复则设为-1
      */
-    @Column(length = 32)
-    private String reply_id;
+    @Column
+    private int reply_id;
 
     /**
      * 评论内容 非空 最大512字节
@@ -86,11 +86,11 @@ public class Comment {
         this.poster_id = poster_id;
     }
 
-    public String getReply_id() {
+    public int getReply_id() {
         return reply_id;
     }
 
-    public void setReply_id(String reply_id) {
+    public void setReply_id(int reply_id) {
         this.reply_id = reply_id;
     }
 
