@@ -43,18 +43,22 @@ public class CurriculumService {
     /**
      * 按课程名称搜索课程 可模糊查询
      * @param a_name 课程名
-     * @return 对应的课程对象List 查询失败返回空List
+     * @return 对应的课程对象List 查询失败或参数为null则返回空List
      */
     public List<Curriculum> searchByName(String a_name){
+        if(a_name==null)
+            return new ArrayList<>();
         return curriculumRepository.findByNameLike("%"+a_name+"%");
     }
 
     /**
      * 按教师姓名搜索课程
      * @param a_teacher_name 教师名
-     * @return 对应的课程对象List 查询失败返回空List
+     * @return 对应的课程对象List 查询失败或参数为null则返回空List
      */
     public List<Curriculum> searchByTeacherName(String a_teacher_name){
+        if(a_teacher_name==null)
+            return new ArrayList<>();
         //可能会有同名教师 用List存储
         List<Teacher>teacherList=teacherRepository.findByName(a_teacher_name);
         //最终得到的课程列表
@@ -72,9 +76,11 @@ public class CurriculumService {
     /**
      * 按学院编号搜索课程
      * @param a_school_id 学院编号
-     * @return 对应的课程对象List 查询失败返回空List
+     * @return 对应的课程对象List 查询失败或参数为null则返回空List
      */
     public List<Curriculum> searchBySchoolId(String a_school_id){
+        if(a_school_id==null)
+            return new ArrayList<>();
         //按学院编号查询学院对象
         Optional<School> school=schoolRepository.findById(a_school_id);
         if(!school.isPresent())
@@ -85,10 +91,12 @@ public class CurriculumService {
     /**
      * 新增课程
      * @param a_curriculum 课程对象
-     * @return 参数对象为空返回false
+     * @return 参数对象为空或对象已存在则返回false
      */
     public boolean createCurriculum(Curriculum a_curriculum){
         if(a_curriculum!=null){
+            if(curriculumRepository.existsById(a_curriculum.getId()))
+                return false;
             curriculumRepository.save(a_curriculum);
             return true;
         }
@@ -112,10 +120,10 @@ public class CurriculumService {
     /**
      * 删除课程
      * @param a_curr_id 课程id
-     * @return 若课程编号不存在则返回false
+     * @return 若课程编号不存在或参数为null则返回false
      */
     public boolean deleteCurriculum(String a_curr_id){
-        if(curriculumRepository.existsById(a_curr_id)){
+        if(a_curr_id!=null&&curriculumRepository.existsById(a_curr_id)){
             curriculumRepository.deleteById(a_curr_id);
             return true;
         }
@@ -125,19 +133,23 @@ public class CurriculumService {
     /**
      * 查询课程编号对应的课程信息
      * @param a_curr_id 课程编号
-     * @return 对应的课程信息对象 查询失败返回空Optional对象
+     * @return 对应的课程信息对象 查询失败或参数为null则返回空Optional对象
      */
     public Optional<CurrInfo> searchCurrInfoById(String a_curr_id){
+        if(a_curr_id==null)
+            return Optional.empty();
         return currInfoRepository.findById(a_curr_id);
     }
 
     /**
      * 新建课程信息
      * @param a_currinfo 课程信息对象
-     * @return 参数对象为空返回false
+     * @return 参数对象为空或对象已存在则返回false
      */
     public boolean createCurrInfo(CurrInfo a_currinfo){
         if(a_currinfo!=null){
+            if(currInfoRepository.existsById(a_currinfo.getId()))
+                return false;
             currInfoRepository.save(a_currinfo);
             return true;
         }
@@ -161,10 +173,10 @@ public class CurriculumService {
     /**
      * 删除课程信息
      * @param a_curr_id 课程编号
-     * @return 若课程编号不存在则返回false
+     * @return 若课程编号不存在或参数为null则返回false
      */
     public boolean deleteCurrInfo(String a_curr_id){
-        if(currInfoRepository.existsById(a_curr_id)){
+        if(a_curr_id!=null&&currInfoRepository.existsById(a_curr_id)){
             currInfoRepository.deleteById(a_curr_id);
             return true;
         }

@@ -1,6 +1,8 @@
 package com.ciap.controller;
 
+import com.ciap.entity.CurrInfo;
 import com.ciap.entity.Curriculum;
+import com.ciap.service.AccountService;
 import com.ciap.service.CurriculumService;
 import com.ciap.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,22 @@ import java.util.List;
 @RequestMapping("/curriculum")
 public class CurriculumController {
     /**
-     * CurriculumService 服务类
+     * Curriculum服务类
      */
     @Autowired
     private CurriculumService curriculumService;
 
+    /**
+     * School服务类
+     */
     @Autowired
     private SchoolService schoolService;
+
+    /**
+     * Account服务类
+     */
+    @Autowired
+    private AccountService accountService;
 
     /**
      * 按课程名查询课程 可模糊查询
@@ -63,8 +74,74 @@ public class CurriculumController {
     @PostMapping("createCurriculum")
     public boolean createCurriculum(Curriculum a_curriculum){
         if(a_curriculum!=null){
-            a_curriculum.setSchool(null);
+            a_curriculum.setSchool(schoolService.searchSchoolById(a_curriculum.getSchool_id()).get());
+            a_curriculum.setTeacher(accountService.searchTeacher(a_curriculum.getTeacher_id()));
+            return curriculumService.createCurriculum(a_curriculum);
         }
         return false;
+    }
+
+    /**
+     * 更新课程
+     * @param a_curriculum 更新后的的课程对象
+     * @return 是否更新成功
+     */
+    @PutMapping("updateCurriculum")
+    public boolean updateCurriculum(Curriculum a_curriculum){
+        if(a_curriculum!=null){
+            a_curriculum.setSchool(schoolService.searchSchoolById(a_curriculum.getSchool_id()).get());
+            return curriculumService.updateCurriculum(a_curriculum);
+        }
+        return false;
+    }
+
+    /**
+     * 删除课程
+     * @param a_curr_id 课程id
+     * @return 若课程不存在返回false
+     */
+    @DeleteMapping("deleteCurriculum/{a_curr_id}")
+    public boolean deleteCurriculum(@PathVariable("a_curr_id") String a_curr_id){
+        return curriculumService.deleteCurriculum(a_curr_id);
+    }
+
+    /**
+     * 查询课程编号对应的课程信息
+     * @param a_curr_id 课程编号
+     * @return 对应的课程信息对象 查询失败返回null
+     */
+    @GetMapping("searchCurrInfoById/{a_curr_id}")
+    public CurrInfo searchCurrInfoById(@PathVariable("a_curr_id") String a_curr_id){
+        return curriculumService.searchCurrInfoById(a_curr_id).get();
+    }
+
+    /**
+     * 新建课程信息
+     * @param a_currinfo 课程信息对象
+     * @return 是否新建成功
+     */
+    @PostMapping("createCurrInfo")
+    public boolean createCurrInfo(CurrInfo a_currinfo){
+        return curriculumService.createCurrInfo(a_currinfo);
+    }
+
+    /**
+     * 更新课程信息
+     * @param a_currinfo 更新后的课程信息对象
+     * @return 是否更新成功
+     */
+    @PutMapping("updateCurrInfo")
+    public boolean updateCurrInfo(CurrInfo a_currinfo){
+        return curriculumService.updateCurrInfo(a_currinfo);
+    }
+
+    /**
+     * 删除课程信息
+     * @param a_curr_id 课程编号
+     * @return 是否删除成功
+     */
+    @DeleteMapping("deleteCurrInfo/{a_curr_id}")
+    public boolean deleteCurrInfo(@PathVariable("a_curr_id") String a_curr_id){
+        return curriculumService.deleteCurrInfo(a_curr_id);
     }
 }

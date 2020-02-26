@@ -13,4 +13,6 @@ import java.util.List;
 
 public interface MaterialRepository extends JpaRepository<Material,String> {
     List<Material> findByCurriculum(Curriculum curriculum);
+    boolean existsById(int id);
+    void deleteById(int id);
 }

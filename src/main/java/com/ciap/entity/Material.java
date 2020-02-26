@@ -26,9 +26,9 @@ public class Material {
     private Date datetime;
 
     /**
-     * 文件url 非空 最大512字节
+     * 文件url 非空 不可重复 最大512字节
      */
-    @Column(nullable = false,length = 512)
+    @Column(nullable = false,unique = true,length = 512)
     private String url;
 
     /**

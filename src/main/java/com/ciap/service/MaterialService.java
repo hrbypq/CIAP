@@ -33,10 +33,12 @@ public class MaterialService {
     /**
      * 新增文件记录
      * @param a_material 文件对象
-     * @return 若参数对象为空则返回false 其他情况返回true
+     * @return 若参数对象为空或对象已存在则返回false
      */
     public boolean createMaterial(Material a_material){
         if(a_material!=null){
+            if(materialRepository.existsById(a_material.getId()))
+                return false;
             materialRepository.save(a_material);
             return true;
         }
@@ -46,9 +48,11 @@ public class MaterialService {
     /**
      * 查询该课程的所有文件记录
      * @param a_curr_id 课程编号
-     * @return 对应的文件对象List 查询失败返回空List
+     * @return 对应的文件对象List 查询失败或参数为null返回空List
      */
     public List<Material> searchByCurrId(String a_curr_id){
+        if(a_curr_id==null)
+            return new ArrayList<>();
         Optional<Curriculum>curriculum=curriculumRepository.findById(a_curr_id);
         if(!curriculum.isPresent())
             return new ArrayList<>();
@@ -60,7 +64,7 @@ public class MaterialService {
      * @param a_material_id 文件编号
      * @return 若文件编号不存在则返回false
      */
-    public boolean deleteMaterial(String a_material_id){
+    public boolean deleteMaterial(int a_material_id){
         if(materialRepository.existsById(a_material_id)){
             materialRepository.deleteById(a_material_id);
             return true;
