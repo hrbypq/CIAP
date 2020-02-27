@@ -61,7 +61,7 @@ public class CurriculumController {
      * @param a_school_id 学院编号
      * @return 课程对象List 查询失败则返回空List
      */
-    @GetMapping("searchCurrBySchoolId/{a_school_id}")
+    @GetMapping("/searchCurrBySchoolId/{a_school_id}")
     public List<Curriculum> searchCurrBySchoolId(@PathVariable("a_school_id") String a_school_id){
         return curriculumService.searchBySchoolId(a_school_id);
     }
@@ -71,8 +71,8 @@ public class CurriculumController {
      * @param a_curriculum 课程对象
      * @return 是否创建成功
      */
-    @PostMapping("createCurriculum")
-    public boolean createCurriculum(Curriculum a_curriculum){
+    @PostMapping("/createCurriculum")
+    public boolean createCurriculum(@RequestBody Curriculum a_curriculum){
         if(a_curriculum!=null){
             a_curriculum.setSchool(schoolService.searchSchoolById(a_curriculum.getSchool_id()).get());
             a_curriculum.setTeacher(accountService.searchTeacher(a_curriculum.getTeacher_id()));
@@ -86,8 +86,8 @@ public class CurriculumController {
      * @param a_curriculum 更新后的的课程对象
      * @return 是否更新成功
      */
-    @PutMapping("updateCurriculum")
-    public boolean updateCurriculum(Curriculum a_curriculum){
+    @PutMapping("/updateCurriculum")
+    public boolean updateCurriculum(@RequestBody Curriculum a_curriculum){
         if(a_curriculum!=null){
             a_curriculum.setSchool(schoolService.searchSchoolById(a_curriculum.getSchool_id()).get());
             return curriculumService.updateCurriculum(a_curriculum);
@@ -100,8 +100,8 @@ public class CurriculumController {
      * @param a_curr_id 课程id
      * @return 若课程不存在返回false
      */
-    @DeleteMapping("deleteCurriculum/{a_curr_id}")
-    public boolean deleteCurriculum(@PathVariable("a_curr_id") String a_curr_id){
+    @DeleteMapping("/deleteCurriculumById/{a_curr_id}")
+    public boolean deleteCurriculumById(@PathVariable("a_curr_id") String a_curr_id){
         return curriculumService.deleteCurriculum(a_curr_id);
     }
 
@@ -110,7 +110,7 @@ public class CurriculumController {
      * @param a_curr_id 课程编号
      * @return 对应的课程信息对象 查询失败返回null
      */
-    @GetMapping("searchCurrInfoById/{a_curr_id}")
+    @GetMapping("/searchCurrInfoById/{a_curr_id}")
     public CurrInfo searchCurrInfoById(@PathVariable("a_curr_id") String a_curr_id){
         return curriculumService.searchCurrInfoById(a_curr_id).get();
     }
@@ -120,8 +120,8 @@ public class CurriculumController {
      * @param a_currinfo 课程信息对象
      * @return 是否新建成功
      */
-    @PostMapping("createCurrInfo")
-    public boolean createCurrInfo(CurrInfo a_currinfo){
+    @PostMapping("/createCurrInfo")
+    public boolean createCurrInfo(@RequestBody CurrInfo a_currinfo){
         return curriculumService.createCurrInfo(a_currinfo);
     }
 
@@ -130,8 +130,8 @@ public class CurriculumController {
      * @param a_currinfo 更新后的课程信息对象
      * @return 是否更新成功
      */
-    @PutMapping("updateCurrInfo")
-    public boolean updateCurrInfo(CurrInfo a_currinfo){
+    @PutMapping("/updateCurrInfo")
+    public boolean updateCurrInfo(@RequestBody CurrInfo a_currinfo){
         return curriculumService.updateCurrInfo(a_currinfo);
     }
 
@@ -140,8 +140,8 @@ public class CurriculumController {
      * @param a_curr_id 课程编号
      * @return 是否删除成功
      */
-    @DeleteMapping("deleteCurrInfo/{a_curr_id}")
-    public boolean deleteCurrInfo(@PathVariable("a_curr_id") String a_curr_id){
+    @DeleteMapping("/deleteCurrInfoById/{a_curr_id}")
+    public boolean deleteCurrInfoById(@PathVariable("a_curr_id") String a_curr_id){
         return curriculumService.deleteCurrInfo(a_curr_id);
     }
 }
