@@ -70,6 +70,8 @@ public class AccountService {
      * @return
      */
     public boolean updateStudentPassword(String a_id,String a_pwd){
+        if(!studentRepository.existsById(a_id))
+            return false;
         Student student=studentRepository.findById(a_id).get();
         student.setPassword(a_pwd);
         Student res=studentRepository.save(student);
@@ -86,6 +88,8 @@ public class AccountService {
      * @return
      */
     public boolean updateTeacherPassword(String a_id,String a_pwd){
+        if(!teacherRepository.existsById(a_id))
+            return false;
         Teacher teacher=teacherRepository.findById(a_id).get();
         teacher.setPassword(a_pwd);
         Teacher res=teacherRepository.save(teacher);
@@ -102,6 +106,8 @@ public class AccountService {
      * @return
      */
     public boolean updateTeacherInfo(String a_id,String a_intro){
+        if(!teacherRepository.existsById(a_id))
+            return false;
         Teacher teacher=teacherRepository.findById(a_id).get();
         teacher.setIntro(a_intro);
         Teacher res=teacherRepository.save(teacher);

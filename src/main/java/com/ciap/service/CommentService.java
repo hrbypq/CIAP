@@ -6,7 +6,10 @@ import com.ciap.entity.Comment;
 import com.ciap.entity.Curriculum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentService {
@@ -26,11 +29,10 @@ public class CommentService {
      * @return
      */
     public boolean createComment(Comment a_comment){
-        Comment comment=commentRepository.save(a_comment);
-        if(comment.equals(a_comment))
-            return true;
-        else
+        if (a_comment==null)
             return false;
+        Comment comment=commentRepository.save(a_comment);
+        return true;
     }
 
     /**
@@ -38,10 +40,14 @@ public class CommentService {
      * @param a_curr_id 课程主键
      * @return
      */
+
     public List<Comment> printComment(String a_curr_id){
-        List<Comment>res=null;
-        Curriculum curriculum=curriculumRepository.getOne(a_curr_id);
-        res=commentRepository.findAllByCurriculum(curriculum);
+        List<Comment>res=new ArrayList<Comment>();
+        Optional<Curriculum> curriculum=curriculumRepository.findById(a_curr_id);
+        if(!curriculum.isPresent())
+            return res;
+        else
+            res=commentRepository.findAllByCurriculum(curriculum.get());
         return res;
     }
 
@@ -51,6 +57,8 @@ public class CommentService {
      * @return
      */
     public boolean deleteComment(int a_id){
+        if(!commentRepository.existsById(a_id))
+            return false;
         commentRepository.deleteById(a_id);
 
         if(!commentRepository.existsById(a_id))
