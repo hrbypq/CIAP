@@ -39,4 +39,15 @@ public class SchoolService {
             return schoolRepository.findById(a_id);
         return Optional.empty();
     }
+
+    /**
+     * 按编号查找学院是否存在
+     * @param a_id 学员编号
+     * @return 不存在或参数为null则返回false
+     */
+    public boolean existsById(String a_id){
+        if(a_id!=null)
+            return schoolRepository.existsById(a_id);
+        return false;
+    }
 }

@@ -46,11 +46,20 @@ public class MaterialService {
     }
 
     /**
+     * 按文件编号查询文件记录
+     * @param id 文件编号
+     * @return 若查询失败则返回空Optional对象
+     */
+    public Optional<Material> searchMaterialById(int id){
+        return materialRepository.findById(id);
+    }
+
+    /**
      * 查询该课程的所有文件记录
      * @param a_curr_id 课程编号
      * @return 对应的文件对象List 查询失败或参数为null返回空List
      */
-    public List<Material> searchByCurrId(String a_curr_id){
+    public List<Material> searchAllByCurrId(String a_curr_id){
         if(a_curr_id==null)
             return new ArrayList<>();
         Optional<Curriculum>curriculum=curriculumRepository.findById(a_curr_id);

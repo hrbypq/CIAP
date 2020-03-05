@@ -4,6 +4,8 @@ import com.ciap.dao.*;
 import com.ciap.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +41,18 @@ public class CurriculumService {
      */
     @Autowired
     private SchoolRepository schoolRepository;
+
+    /**
+     * Material Dao接口
+     */
+    @Autowired
+    private MaterialRepository materialRepository;
+
+    /**
+     * Comment Dao接口
+     */
+    @Autowired
+    private CommentRepository commentRepository;
 
     /**
      * 按课程名称搜索课程 可模糊查询
@@ -104,7 +118,7 @@ public class CurriculumService {
     }
 
     /**
-     * 更新课程
+     * 更新课程 停用
      * @param a_curriculum 更新后的的课程对象
      * @return 若参数对象为空或课程编号不存在则返回false
      */
@@ -122,8 +136,13 @@ public class CurriculumService {
      * @param a_curr_id 课程id
      * @return 若课程编号不存在或参数为null则返回false
      */
+    @Transactional
     public boolean deleteCurriculum(String a_curr_id){
         if(a_curr_id!=null&&curriculumRepository.existsById(a_curr_id)){
+            //删除课程下所有评论
+            commentRepository.deleteAllByCurriculum(curriculumRepository.findById(a_curr_id).get());
+            //删除课程下所有资料
+            materialRepository.deleteAllByCurriculum(curriculumRepository.findById(a_curr_id).get());
             curriculumRepository.deleteById(a_curr_id);
             return true;
         }
@@ -157,7 +176,7 @@ public class CurriculumService {
     }
 
     /**
-     * 更新课程信息
+     * 更新课程信息 停用
      * @param a_currinfo 更新后的课程信息对象
      * @return 若参数对象为空或课程编号不存在则返回false
      */

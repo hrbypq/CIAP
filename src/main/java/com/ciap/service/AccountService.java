@@ -1,6 +1,5 @@
 package com.ciap.service;
 
-import com.ciap.dao.CurriculumRepository;
 import com.ciap.dao.StudentRepository;
 import com.ciap.dao.TeacherRepository;
 import com.ciap.entity.Student;
@@ -60,7 +59,6 @@ public class AccountService {
         }
         else
             return false;
-
     }
 
     /**
@@ -147,5 +145,16 @@ public class AccountService {
             return false;
         Student student=studentRepository.findById(a_id).get();
         return a_pwd.equals(student.getPassword());
+    }
+
+    /**
+     * 根据编号查询教师是否存在
+     * @param a_teacher_id 教师编号
+     * @return 若不存在或参数为null则返回false
+     */
+    public boolean teacherExistsById(String a_teacher_id){
+        if(a_teacher_id!=null)
+            return teacherRepository.existsById(a_teacher_id);
+        return false;
     }
 }

@@ -7,6 +7,7 @@ import com.ciap.service.CurriculumService;
 import com.ciap.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -74,9 +75,11 @@ public class CurriculumController {
     @PostMapping("/createCurriculum")
     public boolean createCurriculum(@RequestBody Curriculum a_curriculum){
         if(a_curriculum!=null){
-            a_curriculum.setSchool(schoolService.searchSchoolById(a_curriculum.getSchool_id()).get());
-            a_curriculum.setTeacher(accountService.searchTeacher(a_curriculum.getTeacher_id()));
-            return curriculumService.createCurriculum(a_curriculum);
+            if(schoolService.existsById(a_curriculum.getSchool_id())&&accountService.teacherExistsById(a_curriculum.getTeacher_id())){
+                a_curriculum.setSchool(schoolService.searchSchoolById(a_curriculum.getSchool_id()).get());
+                a_curriculum.setTeacher(accountService.searchTeacher(a_curriculum.getTeacher_id()));
+                return curriculumService.createCurriculum(a_curriculum);
+            }
         }
         return false;
     }
@@ -89,8 +92,8 @@ public class CurriculumController {
     @PutMapping("/updateCurriculum")
     public boolean updateCurriculum(@RequestBody Curriculum a_curriculum){
         if(a_curriculum!=null){
-            a_curriculum.setSchool(schoolService.searchSchoolById(a_curriculum.getSchool_id()).get());
-            return curriculumService.updateCurriculum(a_curriculum);
+            this.deleteCurriculumById(a_curriculum.getId());
+            return this.createCurriculum(a_curriculum);
         }
         return false;
     }
@@ -132,7 +135,11 @@ public class CurriculumController {
      */
     @PutMapping("/updateCurrInfo")
     public boolean updateCurrInfo(@RequestBody CurrInfo a_currinfo){
-        return curriculumService.updateCurrInfo(a_currinfo);
+        if(a_currinfo!=null){
+            this.deleteCurrInfoById(a_currinfo.getId());
+            return this.createCurrInfo(a_currinfo);
+        }
+        return false;
     }
 
     /**
