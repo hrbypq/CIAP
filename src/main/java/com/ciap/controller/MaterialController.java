@@ -49,7 +49,7 @@ public class MaterialController {
     }
 
     @PostMapping("/uploadMaterial/{a_curr_id}/{a_teacher_id}")
-    public boolean uploadMaterial(@PathVariable("a_curr_id") String a_curr_id, @PathVariable("teacher_id") String a_teacher_id, MultipartFile file){
+    public boolean uploadMaterial(@PathVariable("a_curr_id") String a_curr_id, @PathVariable("a_teacher_id") String a_teacher_id, MultipartFile file){
         if(file==null)
             return false;
         if(file.isEmpty())
