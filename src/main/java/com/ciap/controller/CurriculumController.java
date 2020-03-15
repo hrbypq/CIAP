@@ -2,13 +2,14 @@ package com.ciap.controller;
 
 import com.ciap.entity.CurrInfo;
 import com.ciap.entity.Curriculum;
+import com.ciap.entity.School;
 import com.ciap.service.AccountService;
 import com.ciap.service.CurriculumService;
 import com.ciap.service.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 课程控制类
@@ -76,7 +77,10 @@ public class CurriculumController {
     public boolean createCurriculum(@RequestBody Curriculum a_curriculum){
         if(a_curriculum!=null){
             if(schoolService.existsById(a_curriculum.getSchool_id())&&accountService.teacherExistsById(a_curriculum.getTeacher_id())){
-                a_curriculum.setSchool(schoolService.searchSchoolById(a_curriculum.getSchool_id()).get());
+                Optional<School> school=schoolService.searchSchoolById(a_curriculum.getSchool_id());
+                if(school.isEmpty())
+                    return false;
+                a_curriculum.setSchool(school.get());
                 a_curriculum.setTeacher(accountService.searchTeacher(a_curriculum.getTeacher_id()));
                 return curriculumService.createCurriculum(a_curriculum);
             }
@@ -115,7 +119,8 @@ public class CurriculumController {
      */
     @GetMapping("/searchCurrInfoById/{a_curr_id}")
     public CurrInfo searchCurrInfoById(@PathVariable("a_curr_id") String a_curr_id){
-        return curriculumService.searchCurrInfoById(a_curr_id).get();
+        Optional<CurrInfo> currInfo=curriculumService.searchCurrInfoById(a_curr_id);
+        return currInfo.orElse(null);
     }
 
     /**

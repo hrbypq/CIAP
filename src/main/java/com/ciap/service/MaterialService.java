@@ -6,6 +6,8 @@ import com.ciap.entity.Curriculum;
 import com.ciap.entity.Material;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +65,7 @@ public class MaterialService {
         if(a_curr_id==null)
             return new ArrayList<>();
         Optional<Curriculum>curriculum=curriculumRepository.findById(a_curr_id);
-        if(!curriculum.isPresent())
+        if(curriculum.isEmpty())
             return new ArrayList<>();
         return materialRepository.findByCurriculum(curriculum.get());
     }
@@ -73,6 +75,7 @@ public class MaterialService {
      * @param a_material_id 文件编号
      * @return 若文件编号不存在则返回false
      */
+    @Transactional
     public boolean deleteMaterial(int a_material_id){
         if(materialRepository.existsById(a_material_id)){
             materialRepository.deleteById(a_material_id);
@@ -80,4 +83,5 @@ public class MaterialService {
         }
         return false;
     }
+
 }

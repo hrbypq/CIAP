@@ -4,7 +4,6 @@ import com.ciap.dao.*;
 import com.ciap.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,8 +80,7 @@ public class CurriculumService {
         for(Teacher teacher:teacherList){
             //该教师的课程列表
             List<Curriculum>curriculumList1=curriculumRepository.findByTeacher(teacher);
-            for(Curriculum curriculum:curriculumList1)
-                curriculumList.add(curriculum);
+            curriculumList.addAll(curriculumList1);
         }
         return curriculumList;
     }
@@ -97,7 +95,7 @@ public class CurriculumService {
             return new ArrayList<>();
         //按学院编号查询学院对象
         Optional<School> school=schoolRepository.findById(a_school_id);
-        if(!school.isPresent())
+        if(school.isEmpty())
             return new ArrayList<>();
         return curriculumRepository.findBySchool(school.get());
     }
@@ -140,9 +138,12 @@ public class CurriculumService {
     public boolean deleteCurriculum(String a_curr_id){
         if(a_curr_id!=null&&curriculumRepository.existsById(a_curr_id)){
             //删除课程下所有评论
-            commentRepository.deleteAllByCurriculum(curriculumRepository.findById(a_curr_id).get());
+            Optional<Curriculum> curriculum=curriculumRepository.findById(a_curr_id);
+            if(curriculum.isEmpty())
+                return false;
+            commentRepository.deleteAllByCurriculum(curriculum.get());
             //删除课程下所有资料
-            materialRepository.deleteAllByCurriculum(curriculumRepository.findById(a_curr_id).get());
+            materialRepository.deleteAllByCurriculum(curriculum.get());
             curriculumRepository.deleteById(a_curr_id);
             return true;
         }

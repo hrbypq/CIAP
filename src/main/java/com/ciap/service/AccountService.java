@@ -6,11 +6,12 @@ import com.ciap.entity.Student;
 import com.ciap.entity.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 /**
  * 账户服务类
  * @version 1.0
- * @author
+ * @author lhy
  */
 
 @Service
@@ -27,107 +28,117 @@ public class AccountService {
      */
     @Autowired
     private TeacherRepository teacherRepository;
+
     /**
      * 创建学生用户
-     * @param a_student
-     * @return
+     * @param a_student 学生对象
+     * @return 是否创建成功
      */
     public boolean createStudentAccount(Student a_student){
         if(a_student==null)
             return false;
         if(!studentRepository.existsById(a_student.getId())) {
-            Student res = null;
-            res = studentRepository.save(a_student);
+            studentRepository.save(a_student);
             return true;
         }
-        else
-            return false;
+        return false;
     }
 
     /**
-     *
-     * @param a_teacher
-     * @return
+     * 创建教师用户
+     * @param a_teacher 教师对象
+     * @return 是否创建成功
      */
     public boolean createTeacherAccount(Teacher a_teacher){
         if(a_teacher==null)
             return false;
         if(!teacherRepository.existsById(a_teacher.getId())) {
-            Teacher res = null;
-            res = teacherRepository.save(a_teacher);
+            teacherRepository.save(a_teacher);
             return true;
         }
-        else
-            return false;
+        return false;
     }
 
     /**
-     *
-     * @param a_id
-     * @param a_pwd
-     * @return
+     * 修改学生密码
+     * @param a_id 学生id
+     * @param a_pwd 新密码
+     * @return 是否修改成功
      */
     public boolean updateStudentPassword(String a_id,String a_pwd){
         if(!studentRepository.existsById(a_id))
             return false;
-        Student student=studentRepository.findById(a_id).get();
+        Optional<Student> s=studentRepository.findById(a_id);
+        if(s.isEmpty())
+            return false;
+        Student student=s.get();
         student.setPassword(a_pwd);
         Student res=studentRepository.save(student);
-        if(a_pwd.equals(res.getPassword()))
-            return true;
-        else
-            return false;
+        return a_pwd.equals(res.getPassword());
     }
 
     /**
-     *
-     * @param a_id
-     * @param a_pwd
-     * @return
+     * 更改教师密码
+     * @param a_id 教师id
+     * @param a_pwd 新密码
+     * @return 是否修改成功
      */
     public boolean updateTeacherPassword(String a_id,String a_pwd){
         if(!teacherRepository.existsById(a_id))
             return false;
-        Teacher teacher=teacherRepository.findById(a_id).get();
+        Optional<Teacher> t=teacherRepository.findById(a_id);
+        if(t.isEmpty())
+            return false;
+        Teacher teacher=t.get();
         teacher.setPassword(a_pwd);
         Teacher res=teacherRepository.save(teacher);
-        if(a_pwd.equals(res.getPassword()))
-            return true;
-        else
-            return false;
+        return a_pwd.equals(res.getPassword());
     }
 
     /**
-     *
-     * @param a_id
-     * @param a_intro
-     * @return
+     * 更新教师个人简介
+     * @param a_id 教师id
+     * @param a_intro 新简介
+     * @return 成否修改成功
      */
     public boolean updateTeacherInfo(String a_id,String a_intro){
         if(!teacherRepository.existsById(a_id))
             return false;
-        Teacher teacher=teacherRepository.findById(a_id).get();
+        Optional<Teacher> t=teacherRepository.findById(a_id);
+        if(t.isEmpty())
+            return false;
+        Teacher teacher=t.get();
         teacher.setIntro(a_intro);
         Teacher res=teacherRepository.save(teacher);
-        if(a_intro.equals(res.getIntro()))
-            return true;
-        else
-            return false;
+        return a_intro.equals(res.getIntro());
 
     }
+
     /**
-     * @param  a_id
-     * @return
+     * 查询教师对象
+     * @param a_id 教师id
+     * @return 教师对象 查询失败返回null
      */
     public Teacher searchTeacher(String a_id){
-     Teacher teacher=null;
-     teacher=teacherRepository.findById(a_id).get();
-     return  teacher;
+        Optional<Teacher> teacher=teacherRepository.findById(a_id);
+        return teacher.orElse(null);
     }
+
     /**
-     * @param a_id
-     * @param a_pwd
-     * @return
+     * 查询学生对象
+     * @param a_id 学生id
+     * @return 学生对象 查询失败返回null
+     */
+    public Student searchStudent(String a_id){
+        Optional<Student> student=studentRepository.findById(a_id);
+        return student.orElse(null);
+    }
+
+    /**
+     * 教师登录
+     * @param a_id 教师id
+     * @param a_pwd 密码
+     * @return 是否验证成功
      */
     public boolean signTeacher(String a_id,String a_pwd){
         if(!teacherRepository.existsById(a_id))
@@ -135,16 +146,20 @@ public class AccountService {
         Teacher teacher=searchTeacher(a_id);
         return a_pwd.equals(teacher.getPassword());
     }
+
     /**
-     * @param a_id
-     * @param a_pwd
-     * @return
+     * 学生登录
+     * @param a_id 学生id
+     * @param a_pwd 密码
+     * @return 是否验证成功
      */
     public boolean signStudent(String a_id,String a_pwd){
         if(!studentRepository.existsById(a_id))
             return false;
-        Student student=studentRepository.findById(a_id).get();
-        return a_pwd.equals(student.getPassword());
+        Optional<Student> student=studentRepository.findById(a_id);
+        if (student.isEmpty())
+            return false;
+        return a_pwd.equals(student.get().getPassword());
     }
 
     /**
