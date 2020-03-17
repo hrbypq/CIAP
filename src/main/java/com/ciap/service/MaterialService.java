@@ -39,8 +39,6 @@ public class MaterialService {
      */
     public boolean createMaterial(Material a_material){
         if(a_material!=null){
-            if(materialRepository.existsById(a_material.getId()))
-                return false;
             materialRepository.save(a_material);
             return true;
         }

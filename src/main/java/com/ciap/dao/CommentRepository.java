@@ -11,7 +11,7 @@ import java.util.List;
  * @author ypq
  */
 
-public interface CommentRepository extends JpaRepository<Comment,String> {
+public interface CommentRepository extends JpaRepository<Comment,Integer> {
     List<Comment> findAllByCurriculum(Curriculum curriculum);
     Comment findById(int a_id);
     void deleteById(int a_id);

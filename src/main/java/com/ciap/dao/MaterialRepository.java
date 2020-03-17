@@ -12,7 +12,7 @@ import java.util.Optional;
  * @author ypq
  */
 
-public interface MaterialRepository extends JpaRepository<Material,String> {
+public interface MaterialRepository extends JpaRepository<Material,Integer> {
     Optional<Material> findById(int id);
     List<Material> findByCurriculum(Curriculum curriculum);
     boolean existsById(int id);
