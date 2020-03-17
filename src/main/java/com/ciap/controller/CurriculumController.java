@@ -20,6 +20,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/curriculum")
 public class CurriculumController {
+
     /**
      * Curriculum服务类
      */
@@ -66,6 +67,16 @@ public class CurriculumController {
     @GetMapping("/searchCurrBySchoolId/{a_school_id}")
     public List<Curriculum> searchCurrBySchoolId(@PathVariable("a_school_id") String a_school_id){
         return curriculumService.searchBySchoolId(a_school_id);
+    }
+
+    /**
+     * 根据课程编号查询课程对象
+     * @param id 课程编号
+     * @return 课程对象 查询失败返回null
+     */
+    @GetMapping("searchCurrById/{id}")
+    public Curriculum searchCurrById(@PathVariable("id") String id){
+        return curriculumService.searchCurriculumById(id).orElse(null);
     }
 
     /**

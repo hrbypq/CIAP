@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @Service
 public class CurriculumService {
+
     /**
      * Curriculum Dao接口
      */
@@ -98,6 +99,17 @@ public class CurriculumService {
         if(school.isEmpty())
             return new ArrayList<>();
         return curriculumRepository.findBySchool(school.get());
+    }
+
+    /**
+     * 根据课程编号查询课程对象
+     * @param id 课程编号
+     * @return 包含课程对象的Optional对象 查询失败返回空Optional对象
+     */
+    public Optional<Curriculum> searchCurriculumById(String id){
+        if(id==null)
+            return Optional.empty();
+        return curriculumRepository.findById(id);
     }
 
     /**

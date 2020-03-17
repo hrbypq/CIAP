@@ -44,7 +44,7 @@ public class StudentCurrController {
      * @param studentCurr 学生-课程关系对象
      * @return 是否新增成功
      */
-    @PutMapping("/createParticipation")
+    @PostMapping("/createParticipation")
     public boolean createParticipation(@RequestBody StudentCurr studentCurr){
         return studentCurrService.createParticipation(studentCurr);
     }

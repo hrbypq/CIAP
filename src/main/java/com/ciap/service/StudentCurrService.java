@@ -29,7 +29,7 @@ public class StudentCurrService {
     private StudentRepository studentRepository;
 
     /**
-     * 查询某学生参加的课程的id
+     * 查询某学生参加的所有课程的id
      * @param student_id 学生id
      * @return 课程id的List 查询失败返回空List
      */
@@ -40,7 +40,7 @@ public class StudentCurrService {
     }
 
     /**
-     * 查询参加某课程的学生的id
+     * 查询参加某课程的所有学生的id
      * @param curr_id 课程id
      * @return 学生id的List 查询失败返回空List
      */
@@ -58,6 +58,10 @@ public class StudentCurrService {
     public boolean createParticipation(StudentCurr studentCurr){
         if(studentCurr==null)
             return false;
+        //检查数据库中是否已有此条关系记录
+        if(studentCurrRepository.existsById(studentCurr.getId()))
+            return false;
+        //检查外键约束(并没有真的设置外键 这是手动检查)
         if(curriculumRepository.existsById(studentCurr.getCurrId())&&studentRepository.existsById(studentCurr.getStudentId())){
             studentCurrRepository.save(studentCurr);
             return true;
